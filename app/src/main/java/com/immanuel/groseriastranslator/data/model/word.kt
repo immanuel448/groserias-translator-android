@@ -1,4 +1,4 @@
-package com.Immanuel.groseriastranslator.data.model
+package com.immanuel.groseriastranslator.data.model
 
 data class Word(
     val id: Int,

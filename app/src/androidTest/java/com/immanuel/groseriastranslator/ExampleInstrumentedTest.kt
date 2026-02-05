@@ -1,4 +1,4 @@
-package com.Immanuel.groseriastranslator
+package com.immanuel.groseriastranslator
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,4 +1,4 @@
-package com.Immanuel.groseriastranslator.ui.theme
+package com.immanuel.groseriastranslator.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

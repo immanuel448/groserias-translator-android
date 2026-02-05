@@ -1,4 +1,4 @@
-package com.Immanuel.groseriastranslator
+package com.immanuel.groseriastranslator
 
 import org.junit.Test
 

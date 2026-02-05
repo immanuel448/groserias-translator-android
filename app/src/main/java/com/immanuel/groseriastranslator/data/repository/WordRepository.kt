@@ -1,6 +1,6 @@
-package com.Immanuel.groseriastranslator.data.repository
+package com.immanuel.groseriastranslator.data.repository
 
-import com.Immanuel.groseriastranslator.data.model.Word
+import com.immanuel.groseriastranslator.data.model.Word
 
 class WordRepository {
 

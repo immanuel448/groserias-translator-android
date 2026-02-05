@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.Immanuel.groseriastranslator"
+    namespace = "com.immanuel.groseriastranslator"
     compileSdk {
         version = release(36)
     }
