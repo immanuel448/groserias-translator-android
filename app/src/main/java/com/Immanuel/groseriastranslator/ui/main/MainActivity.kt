@@ -1,4 +1,4 @@
-package com.Immanuel.groseriastranslator
+package com.Immanuel.groseriastranslator.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
