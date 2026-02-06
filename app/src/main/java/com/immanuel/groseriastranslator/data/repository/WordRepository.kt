@@ -4,16 +4,16 @@ import com.immanuel.groseriastranslator.data.model.Word
 
 class WordRepository {
 
-    fun getWords(): List<Word> {
+    fun getWords(language: String): List<Word> {
         return listOf(
             Word(
                 id = 1,
-                original = "fuck",
-                languageFrom = "en",
-                languageTo = "es",
-                translation = "joder",
+                base = "fuck",
+                language = "en",
+                synonyms = listOf("fucking", "fucker", "motherfucker"),
                 censored = "f***"
             )
         )
     }
 }
+
