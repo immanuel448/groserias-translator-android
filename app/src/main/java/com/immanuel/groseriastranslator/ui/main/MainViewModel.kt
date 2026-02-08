@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.immanuel.groseriastranslator.data.repository.WordRepository
 import com.immanuel.groseriastranslator.data.repository.TranslationRepository
 
-class MainViewModel : ViewModel() {
 
+    class MainViewModel : ViewModel() {
     private val wordRepository = WordRepository()
     private val translationRepository = TranslationRepository()
 
