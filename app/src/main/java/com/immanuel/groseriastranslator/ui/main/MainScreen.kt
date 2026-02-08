@@ -9,15 +9,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.immanuel.groseriastranslator.domain.censor.censor
+
 
 @Composable
 fun MainScreen(
     original: String,
     translation: String,
-    censored: String,
     languageFrom: String,
-    languageTo: String
-) {
+    languageTo: String,
+    isCensored: Boolean
+){
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
@@ -52,6 +54,11 @@ fun MainScreen(
             text = "Censurada",
             style = MaterialTheme.typography.titleMedium
         )
-        Text(text = censored)
+        Text(
+            text = censor(
+                text = original,
+                enabled = isCensored
+            )
+        )
     }
 }

@@ -10,8 +10,7 @@ class WordRepository {
                 id = 1,
                 base = "fuck",
                 language = "en",
-                synonyms = listOf("fucking", "fucker", "motherfucker"),
-                censored = "f***"
+                synonyms = listOf("fucking", "fucker", "motherfucker")
             )
         )
     }

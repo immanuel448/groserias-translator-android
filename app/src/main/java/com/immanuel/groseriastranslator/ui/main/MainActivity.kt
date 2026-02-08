@@ -20,9 +20,9 @@ class MainActivity : ComponentActivity() {
                 MainScreen(
                     original = viewModel.word.base,
                     translation = viewModel.translation.translation,
-                    censored = viewModel.word.censored,
                     languageFrom = viewModel.word.language,
-                    languageTo = viewModel.translation.languageTo
+                    languageTo = viewModel.translation.languageTo,
+                    isCensored = true // luego será preferencia del usuario
                 )
             }
         }
