@@ -1,5 +1,9 @@
 package com.immanuel.groseriastranslator.ui.main
 
+import androidx.compose.material3.Switch
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -18,8 +22,10 @@ fun MainScreen(
     translation: String,
     languageFrom: String,
     languageTo: String,
-    isCensored: Boolean
-){
+    isCensored: Boolean,
+    onToggleCensorship: () -> Unit
+)
+{
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
@@ -51,9 +57,23 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Censurada",
+            text = "Censura",
             style = MaterialTheme.typography.titleMedium
         )
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Censura activada")
+            Switch(
+                checked = isCensored,
+                onCheckedChange = { onToggleCensorship() }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         Text(
             text = censor(
                 text = original,

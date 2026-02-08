@@ -13,18 +13,20 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             GroseriasTranslatorTheme {
-
                 // Compose crea y gestiona el ViewModel
                 val viewModel: MainViewModel = viewModel()
-
                 MainScreen(
                     original = viewModel.word.base,
                     translation = viewModel.translation.translation,
                     languageFrom = viewModel.word.language,
                     languageTo = viewModel.translation.languageTo,
-                    isCensored = true // luego será preferencia del usuario
+                    isCensored = viewModel.isCensored.value,
+                    onToggleCensorship = {
+                        viewModel.toggleCensorship()
+                    }
                 )
             }
         }
+
     }
 }
