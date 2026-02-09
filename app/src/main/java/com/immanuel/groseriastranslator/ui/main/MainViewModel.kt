@@ -5,51 +5,57 @@ import androidx.lifecycle.viewModelScope
 import com.immanuel.groseriastranslator.data.preferences.CensorshipPreferences
 import com.immanuel.groseriastranslator.data.repository.WordRepository
 import com.immanuel.groseriastranslator.data.repository.TranslationRepository
+import com.immanuel.groseriastranslator.data.model.word.Word
+import com.immanuel.groseriastranslator.data.model.word.WordVariant
+import com.immanuel.groseriastranslator.data.model.translation.Translation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import com.immanuel.groseriastranslator.data.model.word.Word
-import com.immanuel.groseriastranslator.data.model.translation.Translation
 
 class MainViewModel(
-    // Preferencias que leen y guardan la censura en disco
     private val preferences: CensorshipPreferences
 ) : ViewModel() {
 
-    // Repositorios: fuente de datos (simulada por ahora)
+    // Repositorios (simulan BD por ahora)
     private val wordRepository = WordRepository()
     private val translationRepository = TranslationRepository()
 
-    // Datos base que la UI va a mostrar
-    val words = wordRepository.getWords("en")
+    // Lista de conceptos
+    val words: List<Word> = wordRepository.getWords("en")
 
+    // Word seleccionado
     private val _selectedWord = MutableStateFlow(words.first())
     val selectedWord: StateFlow<Word> = _selectedWord.asStateFlow()
 
-    private val _translation = MutableStateFlow(
-        translationRepository
-            .getTranslations(_selectedWord.value.id, "es")
-            .first()
+    // Variante seleccionada (base o sinónimo)
+    private val _selectedVariant = MutableStateFlow(words.first().variants.first())
+    val selectedVariant: StateFlow<WordVariant> = _selectedVariant.asStateFlow()
+
+    // Traducción del concepto
+    private val _translation = MutableStateFlow<Translation>(
+        translationRepository.getTranslation(
+            fromWordId = words.first().id,
+            languageTo = "es"
+        )
     )
     val translation: StateFlow<Translation> = _translation.asStateFlow()
 
+    // Cambiar palabra (concepto)
     fun selectWord(word: Word) {
         _selectedWord.value = word
-        _translation.value = translationRepository
-            .getTranslations(word.id, "es")
-            .first()
+        _selectedVariant.value = word.variants.first()
+
+        _translation.value =
+            translationRepository.getTranslation(word.id, "es")
     }
 
-    // Estado observable para Compose
-    // La UI se redibuja cuando este valor cambia
+    // --- CENSURA ---
+
     private val _isCensored = MutableStateFlow(true)
     val isCensored: StateFlow<Boolean> = _isCensored.asStateFlow()
 
     init {
-        // Al iniciar el ViewModel:
-        // escuchamos cambios en DataStore
-        // y actualizamos el estado en memoria
         viewModelScope.launch {
             preferences.censorshipEnabled.collect { enabled ->
                 _isCensored.value = enabled
@@ -57,15 +63,9 @@ class MainViewModel(
         }
     }
 
-    // Se llama cuando el usuario mueve el Switch
     fun toggleCensorship() {
         viewModelScope.launch {
-            // Calculamos el nuevo valor
-            val newValue = !_isCensored.value
-
-            // Guardamos el cambio en DataStore
-            // (esto también disparará el collect de arriba)
-            preferences.setCensorshipEnabled(newValue)
+            preferences.setCensorshipEnabled(!_isCensored.value)
         }
     }
 }
