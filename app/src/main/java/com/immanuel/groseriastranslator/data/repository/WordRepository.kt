@@ -11,6 +11,18 @@ class WordRepository {
                 base = "fuck",
                 language = "en",
                 synonyms = listOf("fucking", "fucker", "motherfucker")
+            ),
+            Word(
+                id = 2,
+                base = "shit",
+                language = "en",
+                synonyms = listOf("bullshit", "shithead")
+            ),
+            Word(
+                id = 3,
+                base = "asshole",
+                language = "en",
+                synonyms = listOf("ass", "jerk")
             )
         )
     }

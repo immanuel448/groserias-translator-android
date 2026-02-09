@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.compose.runtime.collectAsState
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.immanuel.groseriastranslator.data.preferences.CensorshipPreferences
 import com.immanuel.groseriastranslator.ui.theme.GroseriasTranslatorTheme
@@ -25,16 +26,20 @@ class MainActivity : ComponentActivity() {
                 )
 
                 // Pasamos datos + acciones a la UI
+                val selectedWord by viewModel.selectedWord.collectAsState()
+                val translation by viewModel.translation.collectAsState()
+
                 MainScreen(
-                    original = viewModel.word.base,
-                    translation = viewModel.translation.translation,
-                    languageFrom = viewModel.word.language,
-                    languageTo = viewModel.translation.languageTo,
+                    words = viewModel.words,
+                    selectedWord = selectedWord,
+                    translation = translation.translation,
+                    languageFrom = selectedWord.language,
+                    languageTo = translation.languageTo,
                     isCensored = viewModel.isCensored.collectAsState().value,
-                    onToggleCensorship = {
-                        viewModel.toggleCensorship()
-                    }
+                    onToggleCensorship = { viewModel.toggleCensorship() },
+                    onWordSelected = { viewModel.selectWord(it) }
                 )
+
             }
         }
     }

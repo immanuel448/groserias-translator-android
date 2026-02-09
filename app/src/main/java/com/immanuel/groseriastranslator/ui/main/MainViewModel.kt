@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.immanuel.groseriastranslator.data.model.Word
+import com.immanuel.groseriastranslator.data.model.Translation
 
 class MainViewModel(
     // Preferencias que leen y guardan la censura en disco
@@ -20,10 +22,24 @@ class MainViewModel(
     private val translationRepository = TranslationRepository()
 
     // Datos base que la UI va a mostrar
-    val word = wordRepository.getWords("en").first()
-    val translation = translationRepository
-        .getTranslations(word.id, "es")
-        .first()
+    val words = wordRepository.getWords("en")
+
+    private val _selectedWord = MutableStateFlow(words.first())
+    val selectedWord: StateFlow<Word> = _selectedWord.asStateFlow()
+
+    private val _translation = MutableStateFlow(
+        translationRepository
+            .getTranslations(_selectedWord.value.id, "es")
+            .first()
+    )
+    val translation: StateFlow<Translation> = _translation.asStateFlow()
+
+    fun selectWord(word: Word) {
+        _selectedWord.value = word
+        _translation.value = translationRepository
+            .getTranslations(word.id, "es")
+            .first()
+    }
 
     // Estado observable para Compose
     // La UI se redibuja cuando este valor cambia
