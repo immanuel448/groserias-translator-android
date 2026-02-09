@@ -1,5 +1,5 @@
 package com.immanuel.groseriastranslator.data.repository
-import com.immanuel.groseriastranslator.data.model.Translation
+import com.immanuel.groseriastranslator.data.model.translation.Translation
 
 class TranslationRepository {
 

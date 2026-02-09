@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import com.immanuel.groseriastranslator.data.model.Word
-import com.immanuel.groseriastranslator.data.model.Translation
+import com.immanuel.groseriastranslator.data.model.word.Word
+import com.immanuel.groseriastranslator.data.model.translation.Translation
 
 class MainViewModel(
     // Preferencias que leen y guardan la censura en disco
