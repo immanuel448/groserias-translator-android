@@ -1,9 +1,9 @@
 package com.immanuel.groseriastranslator.ui.main
 
 import android.os.Bundle
-import androidx.compose.runtime.collectAsState
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.immanuel.groseriastranslator.data.preferences.CensorshipPreferences
@@ -25,21 +25,22 @@ class MainActivity : ComponentActivity() {
                     factory = MainViewModelFactory(preferences)
                 )
 
-                // Pasamos datos + acciones a la UI
-                val selectedWord by viewModel.selectedWord.collectAsState()
+                // Obtenemos los datos del ViewModel como State para Compose
+                val selectedVariant by viewModel.selectedVariant.collectAsState()
                 val translation by viewModel.translation.collectAsState()
+                val isCensored by viewModel.isCensored.collectAsState()
 
+                // Pasamos los datos y callbacks a la UI
                 MainScreen(
                     words = viewModel.words,
-                    selectedWord = selectedWord,
-                    translation = translation.translation,
-                    languageFrom = selectedWord.language,
+                    selectedVariant = selectedVariant,
+                    translation = translation.variants.joinToString(", ") { it.text }, // concatenamos traducciones
+                    languageFrom = selectedVariant.text, // aquí puedes usar selectedVariant.text o selectedWord.language según prefieras
                     languageTo = translation.languageTo,
-                    isCensored = viewModel.isCensored.collectAsState().value,
+                    isCensored = isCensored,
                     onToggleCensorship = { viewModel.toggleCensorship() },
                     onWordSelected = { viewModel.selectWord(it) }
                 )
-
             }
         }
     }
