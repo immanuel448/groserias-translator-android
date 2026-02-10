@@ -18,12 +18,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.clickable
 import com.immanuel.groseriastranslator.domain.censor.censor
 import com.immanuel.groseriastranslator.data.model.word.Word
+import com.immanuel.groseriastranslator.data.model.word.WordVariant
 
 
 @Composable
 fun MainScreen(
     words: List<Word>,
-    selectedWord: Word,
+    selectedVariant: WordVariant,
     translation: String,
     languageFrom: String,
     languageTo: String,
@@ -48,14 +49,16 @@ fun MainScreen(
 
         // Lista de palabras seleccionables
         LazyColumn {
+            //solo se se muestra la primera variante de cada palabra eeee
             items(words) { word ->
                 Text(
-                    text = word.base,
+                    text = word.variants.first().text,
                     modifier = Modifier
                         .padding(8.dp)
                         .clickable { onWordSelected(word) }
                 )
             }
+
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -66,7 +69,7 @@ fun MainScreen(
             style = MaterialTheme.typography.titleMedium
         )
         Text(
-            text = if (isCensored) censor(selectedWord.base, enabled = isCensored) else selectedWord.base
+            text = if (isCensored) censor(selectedVariant.text, enabled = isCensored) else selectedVariant.text
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -101,8 +104,10 @@ fun MainScreen(
 
         // traducción censurada según el switch
         Text(
-            text = if (isCensored) censor(translation, enabled = true) else translation
+            text = censor(
+                text = translation,
+                enabled = isCensored
+            )
         )
-
     }
 }
