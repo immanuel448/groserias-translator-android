@@ -1,25 +1,20 @@
 package com.immanuel.groseriastranslator.ui.main
 
-import androidx.compose.material3.Switch
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.Alignment
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.clickable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.immanuel.groseriastranslator.domain.censor.censor
 import com.immanuel.groseriastranslator.data.model.word.Word
 import com.immanuel.groseriastranslator.data.model.word.WordVariant
-
+import com.immanuel.groseriastranslator.data.model.common.VariantType
 
 @Composable
 fun MainScreen(
@@ -30,12 +25,12 @@ fun MainScreen(
     languageTo: String,
     isCensored: Boolean,
     onToggleCensorship: () -> Unit,
-    onWordSelected: (Word) -> Unit
+    onWordSelected: (Word) -> Unit,
+    onVariantSelected: (WordVariant) -> Unit
 ) {
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
-        // Mostrar idiomas
         Text(
             text = "Idioma origen: $languageFrom",
             style = MaterialTheme.typography.labelMedium
@@ -47,9 +42,15 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Lista de palabras seleccionables
+
+        // Ejemplos
+        Text(
+            text = "Selecciona la palabra",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        // Lista de conceptos
         LazyColumn {
-            //solo se se muestra la primera variante de cada palabra eeee
             items(words) { word ->
                 Text(
                     text = word.variants.first().text,
@@ -58,18 +59,46 @@ fun MainScreen(
                         .clickable { onWordSelected(word) }
                 )
             }
-
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Original (censurada o no según isCensored)
+        // Variantes del concepto seleccionado
+        Text(
+            text = "Variantes",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        val currentWord =
+            words.firstOrNull { it.variants.contains(selectedVariant) }
+
+        currentWord?.variants?.forEach { variant ->
+            val label =
+                if (variant.variantType == VariantType.BASE)
+                    "${variant.text} (base)"
+                else
+                    "${variant.text} (sinónimo)"
+
+            Text(
+                text = label,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable { onVariantSelected(variant) }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Original
         Text(
             text = "Original",
             style = MaterialTheme.typography.titleMedium
         )
         Text(
-            text = if (isCensored) censor(selectedVariant.text, enabled = isCensored) else selectedVariant.text
+            text = if (isCensored)
+                censor(selectedVariant.text, enabled = true)
+            else
+                selectedVariant.text
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -101,8 +130,6 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-
-        // traducción censurada según el switch
         Text(
             text = censor(
                 text = translation,

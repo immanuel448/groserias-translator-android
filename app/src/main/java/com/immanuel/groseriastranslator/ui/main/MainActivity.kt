@@ -29,17 +29,20 @@ class MainActivity : ComponentActivity() {
                 val selectedVariant by viewModel.selectedVariant.collectAsState()
                 val translation by viewModel.translation.collectAsState()
                 val isCensored by viewModel.isCensored.collectAsState()
+                val selectedWord by viewModel.selectedWord.collectAsState()
+
 
                 // Pasamos los datos y callbacks a la UI
                 MainScreen(
                     words = viewModel.words,
                     selectedVariant = selectedVariant,
                     translation = translation.variants.joinToString(", ") { it.text }, // concatenamos traducciones
-                    languageFrom = selectedVariant.text, // aquí puedes usar selectedVariant.text o selectedWord.language según prefieras
+                    languageFrom = selectedWord.language,
                     languageTo = translation.languageTo,
                     isCensored = isCensored,
                     onToggleCensorship = { viewModel.toggleCensorship() },
-                    onWordSelected = { viewModel.selectWord(it) }
+                    onWordSelected = { viewModel.selectWord(it) },
+                    onVariantSelected = { /* vacío por ahora */ }
                 )
             }
         }

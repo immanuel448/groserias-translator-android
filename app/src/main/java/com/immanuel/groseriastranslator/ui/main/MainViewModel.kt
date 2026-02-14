@@ -17,37 +17,52 @@ class MainViewModel(
     private val preferences: CensorshipPreferences
 ) : ViewModel() {
 
-    // Repositorios (simulan BD por ahora)
     private val wordRepository = WordRepository()
     private val translationRepository = TranslationRepository()
 
     // Lista de conceptos
     val words: List<Word> = wordRepository.getWords("en")
 
-    // Word seleccionado
-    private val _selectedWord = MutableStateFlow(words.first())
-    val selectedWord: StateFlow<Word> = _selectedWord.asStateFlow()
+    // Variante seleccionada (unidad principal)
+    private val _selectedVariant =
+        MutableStateFlow(words.first().variants.first())
+    val selectedVariant: StateFlow<WordVariant> =
+        _selectedVariant.asStateFlow()
 
-    // Variante seleccionada (base o sinónimo)
-    private val _selectedVariant = MutableStateFlow(words.first().variants.first())
-    val selectedVariant: StateFlow<WordVariant> = _selectedVariant.asStateFlow()
+    // Concepto derivado de la variante seleccionada
+    private val _selectedWord =
+        MutableStateFlow(words.first())
+    val selectedWord: StateFlow<Word> =
+        _selectedWord.asStateFlow()
 
-    // Traducción del concepto
-    private val _translation = MutableStateFlow<Translation>(
+    // Traducción
+    private val _translation = MutableStateFlow(
         translationRepository.getTranslation(
             fromWordId = words.first().id,
             languageTo = "es"
         )
     )
-    val translation: StateFlow<Translation> = _translation.asStateFlow()
+    val translation: StateFlow<Translation> =
+        _translation.asStateFlow()
 
-    // Cambiar palabra (concepto)
+    // Cambiar concepto
     fun selectWord(word: Word) {
         _selectedWord.value = word
         _selectedVariant.value = word.variants.first()
 
         _translation.value =
             translationRepository.getTranslation(word.id, "es")
+    }
+
+    // Cambiar variante explícitamente
+    fun selectVariant(variant: WordVariant) {
+        _selectedVariant.value = variant
+
+        val parentWord = words.first { it.variants.contains(variant) }
+        _selectedWord.value = parentWord
+
+        _translation.value =
+            translationRepository.getTranslation(parentWord.id, "es")
     }
 
     // --- CENSURA ---

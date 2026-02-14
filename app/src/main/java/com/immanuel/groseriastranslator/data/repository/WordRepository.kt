@@ -3,6 +3,7 @@ package com.immanuel.groseriastranslator.data.repository
 import com.immanuel.groseriastranslator.data.model.word.Word
 import com.immanuel.groseriastranslator.data.model.word.WordVariant
 import com.immanuel.groseriastranslator.data.model.common.PartOfSpeech
+import com.immanuel.groseriastranslator.data.model.common.VariantType
 
 class WordRepository {
 
@@ -21,6 +22,7 @@ class WordRepository {
                         text = "fuck",
                         partOfSpeech = PartOfSpeech.VERB,
                         intensity = 5,
+                        variantType = VariantType.BASE,
                         examples = listOf("Fuck this!", "I don't give a fuck.")
                     ),
                     WordVariant(
@@ -28,6 +30,7 @@ class WordRepository {
                         text = "fucking",
                         partOfSpeech = PartOfSpeech.ADJECTIVE,
                         intensity = 5,
+                        variantType = VariantType.SYNONYM,
                         examples = listOf("This is fucking insane.")
                     ),
                     WordVariant(
@@ -35,6 +38,7 @@ class WordRepository {
                         text = "motherfucker",
                         partOfSpeech = PartOfSpeech.NOUN,
                         intensity = 5,
+                        variantType = VariantType.SYNONYM,
                         examples = listOf("That guy is a motherfucker.")
                     )
                 )
@@ -52,6 +56,7 @@ class WordRepository {
                         text = "shit",
                         partOfSpeech = PartOfSpeech.NOUN,
                         intensity = 4,
+                        variantType = VariantType.BASE,
                         examples = listOf("This is shit.")
                     ),
                     WordVariant(
@@ -59,6 +64,7 @@ class WordRepository {
                         text = "bullshit",
                         partOfSpeech = PartOfSpeech.NOUN,
                         intensity = 4,
+                        variantType = VariantType.SYNONYM,
                         examples = listOf("That's complete bullshit.")
                     )
                 )
